@@ -6,7 +6,6 @@
 - **Kaku 集成**：`~/.config/kaku/tmux/kaku.tmux.conf`（Kaku 自动管理，勿手动改）
 - **插件目录**：`~/.tmux/plugins/`
 - **会话快照**：`~/.local/share/tmux/resurrect/`
-- **原始备份**：`~/.tmux.conf.bak.20260509-103455`
 
 ## 基础操作
 
@@ -20,20 +19,25 @@
 | 切换 window | `Shift+左/右` |
 | 重载配置 | `C-a r` |
 
-## 鼠标复制（macOS）
+## 鼠标复制（macOS + Kaku 终端）
 
 已配置 `set -g mouse on` + `pbcopy`，三种复制方式：
 
 | 方式 | 操作 | 说明 |
 |---|---|---|
 | 鼠标拖拽 | 拖拽选中文字，松开即复制 | `⌘V` 粘贴，最常用 |
-| vi 模式 | `C-a [` 进入 → 选中 → 按 `y` | 适合精确选择大段文本 |
+| copy-mode | `C-a [` 进入 → 选中 → 按 `y` | 适合精确选择大段文本 |
 | 手动 buffer | `C-a C-c` 复制 / `C-a C-v` 粘贴 | tmux buffer ↔ 系统剪贴板 |
 
 **关键配置项**：
-- `set -g set-clipboard on`：启用 OSC52 剪贴板通道
+- `set -g set-clipboard off`：Kaku 终端下必须关闭（开启会和终端冲突）
 - `MouseDragEnd1Pane → copy-pipe-and-cancel pbcopy`：拖拽松开自动进剪贴板
+- `copy-mode` 和 `copy-mode-vi` **两个表都绑了**（因为 mode-keys 默认是 emacs）
 - tmux 3.2+ 不需要 `reattach-to-user-namespace`，直接用 `pbcopy`
+
+**踩坑记录**：
+- tmux 默认 `mode-keys` 是 `emacs`，对应 `copy-mode` 表；如果只绑 `copy-mode-vi` 则鼠标拖拽复制无效
+- Kaku 终端下 `set-clipboard on`（OSC52）会导致复制异常，必须设为 `off`
 
 ## 会话自动保存与恢复
 
